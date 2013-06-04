@@ -18,7 +18,10 @@ echo "User Check"
      fi
 
 echo "Gathering Info About Your AWS Setup..."
-read -p "Each instance you want in the cluster should have a tag with key 'elastic-cluster', please provide the value of that key (ex:production-logstash, mycluster, etc)" aws-tag
+read -p "Each instance you want in the cluster \
+should have a tag with key 'elastic-cluster', please \
+provide the value of that key (ex:production-logstash, \
+mycluster, etc)" aws-tag
 read -p "Path on disk (no trailing slash) where you want to store data" edata-location
 read -p "Provide IAM provisioned access_key" access_key
 read -p "Provide IAM provisioned secret_key" secret_key

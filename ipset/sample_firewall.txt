@@ -1,0 +1,40 @@
+*filter
+:INPUT ACCEPT [2:240]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [58:6894]
+:FWR -
+
+#all traffic to FWR chain
+-A INPUT -j FWR
+
+#accecpt local
+-A FWR -i lo -j ACCEPT
+
+# Any established connection is money
+-A FWR -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# ICMP echo permitted
+#-A FWR -p icmp -m icmp --icmp-type 8 -j ACCEPT
+
+# Permit my management ip in
+-A FWR -s 10.0.0.15/32 -p tcp -m tcp --dport 22 -j ACCEPT
+-A FWR -s 10.0.0.15/32 -p tcp -m tcp --dport 80 -j ACCEPT
+
+#Whitelist these ipset's and permit them to connect on port 80
+#We ran the following commands to create the match sets:
+# ./cidr_to_ipset.sh GB.txt
+# ./cidr_to_ipset.sh ES.txt
+# ./cidr_to_ipset.sh FR.txt
+-A FWR -m set --match-set GB src -p tcp -m tcp --dport 80 -j ACCEPT
+-A FWR -m set --match-set ES src -p tcp -m tcp --dport 80 -j ACCEPT
+-A FWR -m set --match-set FR src -p tcp -m tcp --dport 80 -j ACCEPT
+
+# log iptables denied calls
+-A FWR -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
+
+# Rejects all remaining connections with port-unreachable errors.
+-A FWR -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -j REJECT --reject-with icmp-port-unreachable
+
+#Reject all udp traffic
+-A FWR -p udp -j REJECT --reject-with icmp-port-unreachable
+COMMIT

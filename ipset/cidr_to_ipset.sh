@@ -48,5 +48,5 @@ do
 ipset -A ${country} $IP -exist
 done
 
-echo "ipset created and also exported to ${country}.ipset"
+echo -e "ipset created and also exported to ${country}.ipset \nTo view your rules try this: ipset -L ${country}"
 ipset save > ${country}.ipset

@@ -12,7 +12,7 @@
 
 #check if argument provided
 if [ "$#" == "0" ]; then
-    echo -e "No arguments provided, please provide file name!/nExample: ./cidr_to_ipset ES.txt"
+    echo -e "No arguments provided, please provide file name!\nExample: ./cidr_to_ipset ES.txt"
     exit 1
 fi
 

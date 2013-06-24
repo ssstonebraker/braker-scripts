@@ -17,7 +17,7 @@ if [ "$#" == "0" ]; then
 fi
 
 #Make sure ipset is installed!
-command -v ipset >/dev/null && continue || { echo "ipset command not found!  Exiting..."; exit 1; }
+command -v ipset >/dev/null || { echo "ipset command not found!  Exiting..."; exit 1; }
 
 #assign user's provided input to variable "fullfile"
 fullfile=$1

@@ -1,0 +1,78 @@
+#! /usr/bin/env bash
+#
+# Description: common_functions
+# Author: Steve Stonebraker
+# use:
+# readonly ourPath="$(dirname $0)"
+# readonly commonFunctions="$ourPath/common_functions"
+# if [ -e "$commonFunctions" ]; then
+#   source "$commonFunctions"
+# else
+#   echo "common_functions not found"
+# fi
+#
+#
+
+########################################
+function print_status ()
+{
+    echo -e "\x1B[01;34m[*]\x1B[0m $1"
+}
+
+function print_good ()
+{
+    echo -e "\x1B[01;32m[*]\x1B[0m $1"
+}
+
+function print_error ()
+{
+    echo -e "\x1B[01;31m[*]\x1B[0m $1"
+}
+
+function print_notification ()
+{
+  echo -e "\x1B[01;33m[*]\x1B[0m $1"
+}
+########################################    
+
+#######################################
+function checkProgramIsInEnvironment
+{
+  if [ ! -x "$(which $1)" ]; then
+    print_status "installing package ${1}"
+      apt-get install -y ${1}
+      if [ $? -eq 0 ]; then
+        print_good "Packages successfully installed."
+      else
+        print_error "Packages failed to install!"
+        exit 1
+    fi
+  else
+    print_status "package ${1} present"
+  fi
+}
+########################################
+function install_packages()
+{
+programs=(s3cmd ipset)
+  for program in "${programs[@]}"; do
+    checkProgramIsInEnvironment "$program"
+  done
+}
+########################################
+function shredFile
+{
+if [ -f "$1" ]; then
+  print_status "Shredding ${1}"
+  shred -u ${1}
+  if [ $? -eq 0 ]; then
+     print_good "${1} shredded"
+  else
+      print_error "${1} failed to shred!"
+  
+  fi
+ else
+  print_error "Unable to shred ${1}, file does not exist!"
+ fi
+}
+########################################

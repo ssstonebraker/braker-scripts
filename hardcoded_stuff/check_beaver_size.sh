@@ -18,6 +18,7 @@ restart_service_mem_ge_x () {
                 $start_service_command
         else
                 /bin/echo "${process_name} is currently using ${actual_size}MB, which is less than ${max_size}MB maximum value"
+                service beaver start
         fi
 
 }
@@ -25,14 +26,6 @@ restart_service_mem_ge_x () {
 /usr/bin/touch /var/run/logstash_beaver.pid
 /bin/chown beaver:beaver /var/run/logstash_beaver.pid
 
-if /bin/ps aux | /bin/grep "[b]eaver" > /dev/null
-then
-    echo "beaver service is running"
-    restart_service_mem_ge_x beaver 512 "service beaver start"
-else
-    echo "Starting beaver process"
-
-    service beaver start
-fi
+restart_service_mem_ge_x beaver 512 "service beaver restart"
 
 

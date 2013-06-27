@@ -76,3 +76,38 @@ if [ -f "$1" ]; then
  fi
 }
 ########################################
+function replaceText
+{
+sed -i "s|${1}|${2}|g" "${3}"
+}
+########################################
+listcontains() {
+    for word in $1; do
+		[[ $word = $2 ]] && return 0
+	done
+	return 1
+}
+########################################
+listcontains_SampleUsage () {
+#FIND OUT fruit TYPE
+#Define list of valid Fruits
+list="apple orange grape pineapple"
+#Loop until user provides valid value in list
+    while true; do
+		print_status "Determine fruit"
+		print_notification "Please enter one of these fruits \nValid Responses: [apple, orange, grape, pineapple]"
+		read -p "fruit type: " FRUIT_TYPE
+		echo ""
+		#Check if user's response matches our list of fruit types
+		if listcontains "$list" ${FRUIT_TYPE}; then
+			print_good "Valid fruit Choice: ${FRUIT_TYPE}"
+			export FRUIT_TYPE
+			echo "do something else in the code here if you want"
+			break
+		else
+			print_error "Invalid fruit Type.  Please try again."
+			continue
+		fi
+	done
+    return 0
+}

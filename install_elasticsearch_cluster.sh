@@ -53,6 +53,8 @@ mv *servicewrapper*/service /usr/share/elasticsearch/bin/
 rm -Rf *servicewrapper*
 /usr/share/elasticsearch/bin/service/elasticsearch install
 ln -s `readlink -f /usr/share/elasticsearch/bin/service/elasticsearch` /usr/bin/rcelasticsearch
+#need to start manually then stop before service start /opt/elasticsearch/bin/elasticsearch
+
 service elasticsearch start
 
 echo "Add our cluster details to the configuration files"

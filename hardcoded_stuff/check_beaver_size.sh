@@ -16,6 +16,9 @@ restart_service_mem_ge_x () {
                 /bin/echo "${process_name} is currently using ${actual_size}MB, which is greater than or equal to ${max_size}MB"
                 /usr/bin/pkill ${process_name}
                 $start_service_command
+                service beaver stop
+                service beaver start
+
         else
                 /bin/echo "${process_name} is currently using ${actual_size}MB, which is less than ${max_size}MB maximum value"
                 service beaver start

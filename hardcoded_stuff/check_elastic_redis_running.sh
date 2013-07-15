@@ -9,7 +9,7 @@
 #
 #
 #  install to cron instructions:
-#  cd /root; curl -O "https://github.com/ssstonebraker/braker-scripts/blob/master/hardcoded_stuff/check_elastic_redis_running.sh";chmod +x /root/check_beaver_size.sh;
+#  cd /root;curl -k -O "https://raw.github.com/ssstonebraker/braker-scripts/master/hardcoded_stuff/check_elastic_redis_running.sh";chmod +x check_elastic_redis_running.sh;
 #  crontab -l > mycron;echo "*/10 * * * * /root/check_elastic_redis_running" >> mycron;crontab mycron;/bin/rm mycron
 #
 function check_if_elasticsearch_running () {

@@ -21,8 +21,7 @@ function check_if_elasticsearch_running () {
 		    echo "${process_name} running"
 		else
 		    echo "${process_name}: not running, starting..."
-		    cd /opt/elasticsearch/bin/
-		    nohup ./elasticsearch >/dev/null 2>&1
+		    service elasticsearch start
 		fi
 }
 function check_if_redis_running () {
@@ -43,6 +42,6 @@ function check_if_redis_running () {
 
 check_if_elasticsearch_running
 check_if_redis_running
-sleep 5
+sleep 30
 check_if_elasticsearch_running
 check_if_redis_running

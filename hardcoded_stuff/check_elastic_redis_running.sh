@@ -10,12 +10,12 @@
 #
 #  install to cron instructions:
 #  cd /root;curl -k -O "https://raw.github.com/ssstonebraker/braker-scripts/master/hardcoded_stuff/check_elastic_redis_running.sh";chmod +x check_elastic_redis_running.sh;
-#  crontab -l > mycron;echo "*/10 * * * * /root/check_elastic_redis_running" >> mycron;crontab mycron;/bin/rm mycron
+#  crontab -l > mycron;echo "*/10 * * * * /root/check_elastic_redis_running.sh" >> mycron;crontab mycron;/bin/rm mycron
 #
 function check_if_elasticsearch_running () {
         current_script=`basename $0`
         process_name="elasticsearch"
-        ps aux | grep "${process_name}" | grep -v 'grep' | grep -v "$current_script"
+        /bin/ps aux | /bin/grep "${process_name}" | /bin/grep -v 'grep' | /bin/grep -v "$current_script"
 	
 		if [ $? -eq 0 ]; then
 		    echo "${process_name} running"
@@ -28,7 +28,7 @@ function check_if_elasticsearch_running () {
 function check_if_redis_running () {
         current_script=`basename $0`
         process_name="redis-server"
-        ps aux | grep "${process_name}" | grep -v 'grep' | grep -v "$current_script"
+        /bin/ps aux | /bin/grep "${process_name}" | /bin/grep -v 'grep' | /bin/grep -v "$current_script"
 	
 		if [ $? -eq 0 ]; then
 		    echo "${process_name} running"

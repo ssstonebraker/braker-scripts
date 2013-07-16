@@ -1,5 +1,19 @@
 #!/bin/bash -ex
-
+function check_if_beaver_running () {
+        current_script=`basename $0`
+        process_name="beaver"
+        /bin/ps aux | /bin/grep "${process_name}" | /bin/grep -v 'grep' | /bin/grep -v "$current_script"
+        
+                if [ $? -eq 0 ]; then
+                    echo "${process_name} running"
+                else
+                    echo "${process_name}: not running, starting..."
+                    if [ -f /var/run/logstash_beaver.pid ] ; then
+                                /bin/rm -f /var/run/logstash_beaver.pid
+                        fi
+                    service beaver start
+                fi
+}
 restart_service_mem_ge_x () {
         #
         # Description:Restart service if memory usage is greater than x
@@ -21,7 +35,6 @@ restart_service_mem_ge_x () {
 
         else
                 /bin/echo "${process_name} is currently using ${actual_size}MB, which is less than ${max_size}MB maximum value"
-                service beaver start
         fi
 
 }
@@ -34,6 +47,7 @@ kill_zombie_processes () {
 /bin/chown beaver:beaver /var/run/logstash_beaver.pid
 
 kill_zombie_processes
+check_if_beaver_running
 restart_service_mem_ge_x beaver 512 "service beaver restart"
 
 

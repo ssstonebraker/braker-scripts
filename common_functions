@@ -136,30 +136,29 @@ restart_service_mem_ge_x () {
 ########################################
 ########################################
 kill_process_with_name () {
-    #kill_process_with_name (some_process_name)
-        current_script=`basename $0`
-        process_name=$1
-        pids=$( ps aux | grep "${process_name}" | grep -v 'grep' | grep -v "$current_script" | awk '{print $2}' )
-        for pid in $pids
-                do
-                echo "$process_name is running with pid $pid ..."
-                if ! kill $pid > /dev/null 2>&1; then
-                        echo "Could not send SIGTERM to $process_nameprocess with $pid .. trying kill -9" >&2
-                        if ! kill -9 $pid > /dev/null 2>&1; then
-                                echo "Unable to kill $pid with kill -9"
-                        else
-                                echo "Successfully killed $process_name with PID $pid!"
-                        fi
-                 else
-                        echo "Successfully killed $process_name with PID $pid!"
-        fi
+  #!/bin/sh
+
+if [[ $1 -eq "" ]]; then
+    echo "Usage: pkill.sh <process name>"
+    exit
+fi
+
+for id in `ps -axcopid,command | grep -i -e $1 | awk '{ print $1 }'`; do
+  kill -9 $id
 done
-        echo "$pids"
 }
-
-
 ########################################
-
+# grep for a process
+function psg {
+  FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'` 
+  REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
+  ps aux | grep "[$FIRST]$REST"
+}
+########################################
+kill_zombie_processes () {
+        /bin/ps -elf | /usr/bin/awk '{print $2 " " $5}' | /bin/grep -w Z | /usr/bin/awk '{print $2}' | xargs kill -9
+}
+########################################
 function system_update_hostname {
     # system_update_hostname(system hostname)
     if [ -z "$1" ]; then

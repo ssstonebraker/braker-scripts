@@ -26,9 +26,14 @@ restart_service_mem_ge_x () {
 
 }
 
+kill_zombie_processes () {
+        /bin/ps -elf | /usr/bin/awk '{print $2 " " $5}' | /bin/grep -w Z | /usr/bin/awk '{print $2}' | xargs kill -9
+}
+
 /usr/bin/touch /var/run/logstash_beaver.pid
 /bin/chown beaver:beaver /var/run/logstash_beaver.pid
 
+kill_zombie_processes
 restart_service_mem_ge_x beaver 512 "service beaver restart"
 
 

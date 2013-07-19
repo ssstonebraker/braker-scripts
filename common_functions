@@ -39,6 +39,11 @@ function print_notification ()
 {
   echo -e "\x1B[01;33m[*]\x1B[0m $1"
 }
+function printline() {
+hr=---------------------------------------------------------------\
+----------------------------------------------------------------
+printf '%s\n' "${hr:0:${COLUMNS:-$(tput cols)}}"
+}
 ########################################    
 function install_packages()
 {
@@ -360,4 +365,91 @@ function restart_initd_services {
         /etc/init.d/$service_name restart
         rm -f /tmp/restart_initd-$service_name
     done
+}
+########################################
+# Setup directories for a mod_security_installation
+  function apache_is_module_loaded {
+  amodule=$1
+  apachectl -M | grep $1
+  if [ $? -eq 0 ]; then
+       print_good "$1 loaded correctly"
+    else
+        print_error "$1 failed to load!"
+        exit 1;
+  fi
+}
+########################################
+# Setup directories for a mod_security_installation
+function modsecurity_setup_apache_modules {
+  a2enmod unique_id
+  cp /usr/local/modsecurity/lib/mod_security2.so /usr/lib/apache2/modules/
+  chmod 644 /usr/lib/apache2/modules/mod_security2.so
+  echo "LoadModule security2_module /usr/lib/apache2/modules/mod_security2.so" > /etc/apache2/mods-available/security2.load
+  a2enmod security2
+  /etc/init.d/apache2 restart
+}
+########################################
+# Setup directories for a mod_security_installation
+function modsecurity_setup_opt_directories {
+  proceed_if_root()
+  MODSEC_HOME=/opt/modsecurity
+
+  #
+  # This is the user running the Apache server
+  #
+  APACHE_USER="www-data"
+  APACHE_GROUP="www-data"
+
+  DIRS="bin etc var var/audit var/data var/lib var/log var/tmp var/upload"
+
+  OWNER_APACHE="$MODSEC_HOME/var/audit $MODSEC_HOME/var/data $MODSEC_HOME/var/tmp $MODSEC_HOME/var/upload"
+  GROUP_APACHE="$MODSEC_HOME $MODSEC_HOME/var $MODSEC_HOME/var/tmp $MODSEC_HOME/bin"
+
+  MODE_750="$MODSEC_HOME $MODSEC_HOME/bin $MODSEC_HOME/var $MODSEC_HOME/var/tmp"
+
+
+
+  #
+  # Creating the directory layout
+  #
+  for i in $DIRS; do
+     DIR="$MODSEC_HOME/$i"
+     echo "Creating $DIR..."
+     mkdir -p $DIR
+     chmod 700 $DIR
+  done
+
+
+  #
+  # Adjusting ownership...
+  #
+  for i in $OWNER_APACHE; do
+     echo "  Changing owner of $i to $APACHE_USER"
+     chown $APACHE_USER $i
+  done
+
+
+  #
+  # Adjusting groups...
+  #
+  for i in $GROUP_APACHE; do
+     echo "  Changing group of $i to $APACHE_GROUP"
+     chgrp $APACHE_GROUP $i
+  done
+
+
+  #
+  # Adjust permissions
+  #
+  for i in $MODE_750; do
+     echo "Changing permissions of $i to 750"
+     chmod 750 $i;
+  done
+  printline()
+  print_good "Final Directory Layout"
+  printline()
+  awk 'BEGIN {printf "%-30s%-9s%-9s%-10s\n","Location","User","Group","Permissions"}'\
+  ;awk 'BEGIN {printf "%-30s%-9s%-9s%-10s\n","--------","----","-----","-----------"}'\
+  ;find /opt/modsecurity/ -printf "%-30p%#-9u%-9g %10M\n"  | sort -k1,1
+  printline()
 }

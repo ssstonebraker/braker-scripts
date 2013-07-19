@@ -50,6 +50,7 @@ install_mod_security "2.7.4"
 ########################################
 
 
-
+printline
+echo -e "To Test add this line to:/opt/modsecurity/etc/main.conf and look at /opt/modsecurity/var/log/debug.log\nSecRule ARGS MY_UNIQUE_TEST_STRING \"phase:2,log,deny,status:503,id:400023023\""
 
 

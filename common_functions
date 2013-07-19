@@ -328,6 +328,7 @@ function append_line {
   if [ $? -eq 0 ]; then
     print_status "$1 already present in file $2"
     else
+    echo "$1" >> "$2"
     print_good "$1 appended to file $2"
  fi
 }
@@ -356,7 +357,19 @@ release=`lsb_release -r|awk '{print $2}'`
      fi
 }
 
-
+########################################
+  # Restart apache if config okay
+########################################
+function apache_restart {
+  apachectl -t
+  if [ "$?" != "0" ]; then
+     print_error "apache syntax error!"
+    exit $?
+  else
+    apachectl restart
+    print_status "Apache Restarted"
+  fi
+}
 ########################################
   # Setup directories for a mod_security_installation
 function modsecurity_setup_apache_modules {
@@ -369,7 +382,7 @@ function modsecurity_setup_apache_modules {
   echo -e "# Load Lua\nLoadFile /usr/lib/liblua5.1.so" >> /etc/apache2/mods-available/security2.load
   echo -e "# Finally, load ModSecurity\nLoadModule security2_module /usr/lib/apache2/modules/mod_security2.so" >> /etc/apache2/mods-available/security2.load
   a2enmod security2
-  /etc/init.d/apache2 restart
+  apache_restart
 }
 ########################################
 # Setup directories for a mod_security_installation
@@ -474,7 +487,15 @@ cd $partial_path_modsec/
 
 
 make
+if [ "$?" != "0" ]; then
+    print_error "make failed!"
+    exit $?
+fi
 make install
+if [ "$?" != "0" ]; then
+    print_error "make install failed!"
+    exit $?
+fi
 ########################################
 #Setup directory Layout
 modsecurity_setup_opt_directories
@@ -501,5 +522,5 @@ append_line "Include /opt/modsecurity/etc/modsecurity.conf" /etc/apache2/apache2
 touch /opt/modsecurity/etc/rules-first.conf
 touch /opt/modsecurity/etc/rules.conf
 touch /opt/modsecurity/etc/rules-last.conf
-/etc/init.d/apache2 restart
+apache_restart
 }

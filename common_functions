@@ -138,7 +138,7 @@ function checkProgramIsInEnvironment
   fi
 }
 ########################################
-function install_packages()
+function install_packages_ipset_s3cmd()
 {
 programs=(s3cmd ipset)
   for program in "${programs[@]}"; do

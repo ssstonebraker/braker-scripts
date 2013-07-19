@@ -478,7 +478,7 @@ make install
 #Setup directory Layout
 modsecurity_setup_opt_directories
 ########################################
-/bin/cp -f $build/modsecurity.conf-recommended /opt/modsecurity/etc/main.conf
+/bin/cp -f $build/$partial_path_modsec/modsecurity.conf-recommended /opt/modsecurity/etc/main.conf
 cat <<EOF > /opt/modsecurity/etc/modsecurity.conf
 
 <IfModule mod_security2.c>

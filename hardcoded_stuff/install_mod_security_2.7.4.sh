@@ -48,15 +48,8 @@ install_packages ${packages[@]}
 #Install Modsecurity version 2.7.4
 install_mod_security "2.7.4"
 ########################################
-########################################
-#Setup directory Layout
-modsecurity_setup_opt_directories
-########################################
-#################################################
-#setup mod unique and modsecurity apache modules
-modsecurity_setup_apache_modules
-#################################################
-#Test if modules are loaded
-apache_is_module_loaded "security2_module"
-apache_is_module_loaded "unique_id_module"
-#################################################
+
+
+
+
+

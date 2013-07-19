@@ -64,68 +64,7 @@ function proceed_if_root()
            exit 1
         fi
 }
-########################################
-#Check for proper ubuntu version
-function check_if_ubuntu_12()
-{
-print_status "OS Version Check."
-release=`lsb_release -r|awk '{print $2}'`
-     if [ $release = "12.04" -o $release = "12.10" -o "13.04" ]
-          then
-                           print_good "OS is Ubuntu. Good to go."
 
-          else
-               print_notification "This is not Ubuntu 12.04 or 12.10, and has NOT been tested on other platforms."
-               while true; do
-                   read -p "Continue? (y/n)" warncheck
-                   case $warncheck in
-                       [Yy]* ) break;;
-                       [Nn]* ) print_error "Bailing."; exit;;
-                       * ) print_notification "Please answer yes or no.";;
-                   esac
-                                done
-                echo " "
-     fi
-}
-########################################
-
-function install_mod_security()
-{
-# Build modsecurity and install in the current directory
-# usage: install_mod_security "2.7.4"
-build=`pwd`
-
-cd $build
-version_modsec=$1
-partial_path_modsec="modsecurity-apache_$version_modsec"
-curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz
-curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz.sha256
-sha256sum -c $partial_path_modsec.tar.gz.sha256
- if [ $? -eq 0 ]; then
-                    print_good "Valid hash for modsec, proceeding...."
-                else
-                    print_error "Invalid hash!"
-                    exit $?
- fi
-tar -xzf $partial_path_modsec.tar.gz
-cd $partial_path_modsec/
-
-./configure
- print_notification "Does the configuration look okay? Do you want to proceed? (note, this is good:  is linked with gnutls... no)"
-               while true; do
-                   read -p "Continue? (y/n)" warncheck
-                   case $warncheck in
-                       [Yy]* ) break;;
-                       [Nn]* ) print_error "Bailing."; exit;;
-                       * ) print_notification "Please answer yes or no.";;
-                   esac
-                                done
-                echo " "
-
-
-make
-make install
-}
 #######################################
 function checkProgramIsInEnvironment
 {
@@ -379,12 +318,56 @@ function restart_initd_services {
   fi
 }
 ########################################
-# Setup directories for a mod_security_installation
+########################################
+#Append line to file if doesn't exist
+#ex: append_line "Include /opt/modsecurity/etc/modsecurity.conf" /etc/apache2/apache2.conf
+function append_line {
+  string_to_append=$1
+  somefile=$2
+  grep -Fxq "$1" "$2"
+  if [ $? -eq 0 ]; then
+    print_status "$1 already present in file $2"
+    else
+    print_good "$1 appended to file $2"
+ fi
+}
+
+########################################
+#Check for proper ubuntu version
+function check_if_ubuntu_12()
+{
+print_status "OS Version Check."
+release=`lsb_release -r|awk '{print $2}'`
+     if [ $release = "12.04" -o $release = "12.10" -o "13.04" ]
+          then
+                           print_good "OS is Ubuntu. Good to go."
+
+          else
+               print_notification "This is not Ubuntu 12.04 or 12.10, and has NOT been tested on other platforms."
+               while true; do
+                   read -p "Continue? (y/n)" warncheck
+                   case $warncheck in
+                       [Yy]* ) break;;
+                       [Nn]* ) print_error "Bailing."; exit;;
+                       * ) print_notification "Please answer yes or no.";;
+                   esac
+                                done
+                echo " "
+     fi
+}
+
+
+########################################
+  # Setup directories for a mod_security_installation
 function modsecurity_setup_apache_modules {
   a2enmod unique_id
   cp /usr/local/modsecurity/lib/mod_security2.so /usr/lib/apache2/modules/
   chmod 644 /usr/lib/apache2/modules/mod_security2.so
-  echo "LoadModule security2_module /usr/lib/apache2/modules/mod_security2.so" > /etc/apache2/mods-available/security2.load
+  ln -s /usr/lib/x86_64-linux-gnu/libxml2.so /usr/lib/libxml2.so
+  ln -s /usr/lib/x86_64-linux-gnu/liblua5.1.so /usr/lib/liblua5.1.so
+  echo -e "# Load libxml2\nLoadFile /usr/lib/libxml2.so" > /etc/apache2/mods-available/security2.load
+  echo -e "# Load Lua\nLoadFile /usr/lib/liblua5.1.so" >> /etc/apache2/mods-available/security2.load
+  echo -e "# Finally, load ModSecurity\nLoadModule security2_module /usr/lib/apache2/modules/mod_security2.so" >> /etc/apache2/mods-available/security2.load
   a2enmod security2
   /etc/init.d/apache2 restart
 }
@@ -452,4 +435,70 @@ function modsecurity_setup_opt_directories {
   ;awk 'BEGIN {printf "%-30s%-9s%-9s%-10s\n","--------","----","-----","-----------"}'\
   ;find /opt/modsecurity/ -printf "%-30p%#-9u%-9g %10M\n"  | sort -k1,1
   printline
+}
+########################################
+
+function install_mod_security()
+{
+# Build modsecurity and install in the current directory
+# usage: install_mod_security "2.7.4"
+build=`pwd`
+
+cd $build
+version_modsec=$1
+partial_path_modsec="modsecurity-apache_$version_modsec"
+curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz
+curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz.sha256
+sha256sum -c $partial_path_modsec.tar.gz.sha256
+ if [ $? -eq 0 ]; then
+                    print_good "Valid hash for modsec, proceeding...."
+                else
+                    print_error "Invalid hash!"
+                    exit $?
+ fi
+tar -xzf $partial_path_modsec.tar.gz
+cd $partial_path_modsec/
+
+./configure
+ print_notification "Does the configuration look okay? Do you want to proceed? (note, this is good:  is linked with gnutls... no)"
+               while true; do
+                   read -p "Continue? (y/n)" warncheck
+                   case $warncheck in
+                       [Yy]* ) break;;
+                       [Nn]* ) print_error "Bailing."; exit;;
+                       * ) print_notification "Please answer yes or no.";;
+                   esac
+                                done
+                echo " "
+
+
+make
+make install
+########################################
+#Setup directory Layout
+modsecurity_setup_opt_directories
+########################################
+/bin/cp -f $build/modsecurity.conf-recommended /opt/modsecurity/etc/main.conf
+cat <<EOF > /opt/modsecurity/etc/modsecurity.conf
+
+<IfModule mod_security2.c>
+Include /opt/modsecurity/etc/main.conf
+Include /opt/modsecurity/etc/rules-first.conf
+Include /opt/modsecurity/etc/rules.conf
+Include /opt/modsecurity/etc/rules-last.conf
+</IfModule>
+EOF
+#################################################
+#setup mod unique and modsecurity apache modules
+modsecurity_setup_apache_modules
+#################################################
+#Test if modules are loaded
+apache_is_module_loaded "security2_module"
+apache_is_module_loaded "unique_id_module"
+#################################################
+append_line "Include /opt/modsecurity/etc/modsecurity.conf" /etc/apache2/apache2.conf
+touch /opt/modsecurity/etc/rules-first.conf
+touch /opt/modsecurity/etc/rules.conf
+touch /opt/modsecurity/etc/rules-last.conf
+service apache2 restart
 }

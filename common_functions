@@ -447,11 +447,12 @@ build=`pwd`
 cd $build
 version_modsec=$1
 partial_path_modsec="modsecurity-apache_$version_modsec"
+print_status "Downloading modsecurity-apache_$version_modsec"
 curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz
 curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz.sha256
 sha256sum -c $partial_path_modsec.tar.gz.sha256
  if [ $? -eq 0 ]; then
-                    print_good "Valid hash for modsec, proceeding...."
+                    print_good "Valid hash for modsecurity-apache_$version_modse, proceeding...."
                 else
                     print_error "Invalid hash!"
                     exit $?

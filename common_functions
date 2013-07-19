@@ -34,7 +34,87 @@ function print_notification ()
   echo -e "\x1B[01;33m[*]\x1B[0m $1"
 }
 ########################################    
+function install_packages()
+{
+ apt-get update &>> $logfile && apt-get install -y ${@} &>> $logfile
+ if [ $? -eq 0 ]; then
+  print_good "Packages successfully installed."
+ else
+  print_error "Packages failed to install!"
+  exit 1
+ fi
+}
+########################################    
+function proceed_if_root()
+{
+#Make sure only root can run our script
+        if [[ $EUID -ne 0 ]]; then
+           print_error "This script must be run as root" 1>&2
+           exit 1
+        fi
+}
+########################################
+#Check for proper ubuntu version
+function check_if_ubuntu_12()
+{
+print_status "OS Version Check."
+release=`lsb_release -r|awk '{print $2}'`
+     if [ $release = "12.04" -o $release = "12.10" -o "13.04" ]
+          then
+                           print_good "OS is Ubuntu. Good to go."
 
+          else
+               print_notification "This is not Ubuntu 12.04 or 12.10, and has NOT been tested on other platforms."
+               while true; do
+                   read -p "Continue? (y/n)" warncheck
+                   case $warncheck in
+                       [Yy]* ) break;;
+                       [Nn]* ) print_error "Bailing."; exit;;
+                       * ) print_notification "Please answer yes or no.";;
+                   esac
+                                done
+                echo " "
+     fi
+}
+########################################
+
+function install_mod_security()
+{
+# Build modsecurity and install in the current directory
+# usage: install_mod_security "2.7.4"
+build=`pwd`
+
+cd $build
+version_modsec=$1
+partial_path_modsec="modsecurity-apache_$version_modsec"
+curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz
+curl -s -O https://www.modsecurity.org/tarball/$version_modsec/$partial_path_modsec.tar.gz.sha256
+sha256sum -c $partial_path_modsec.tar.gz.sha256
+ if [ $? -eq 0 ]; then
+                    print_good "Valid hash for modsec, proceeding...."
+                else
+                    print_error "Invalid hash!"
+                    exit $?
+ fi
+tar -xzf $partial_path_modsec.tar.gz
+cd $partial_path_modsec/
+
+./configure
+ print_notification "Does the configuration look okay? Do you want to proceed? (note, this is good:  is linked with gnutls... no)"
+               while true; do
+                   read -p "Continue? (y/n)" warncheck
+                   case $warncheck in
+                       [Yy]* ) break;;
+                       [Nn]* ) print_error "Bailing."; exit;;
+                       * ) print_notification "Please answer yes or no.";;
+                   esac
+                                done
+                echo " "
+
+
+make
+make install
+}
 #######################################
 function checkProgramIsInEnvironment
 {

@@ -24,3 +24,4 @@ function system_update_hostname {
 	/bin/hostname -F /etc/hostname
 	/etc/init.d/hostname restart
 }
+system_update_hostname $1

@@ -5,7 +5,7 @@
 #            for ubuntu 12.04 precise
 #
 #
-set -x
+
 ########################################
 #source another file (it has functions we use)
 readonly ourPath="$(dirname $0)"

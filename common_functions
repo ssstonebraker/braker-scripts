@@ -392,7 +392,7 @@ function modsecurity_setup_apache_modules {
 # Setup directories for a mod_security_installation
 function modsecurity_setup_opt_directories {
   proceed_if_root()
-  MODSEC_HOME=/opt/modsecurity
+  MODSEC_HOME="/opt/modsecurity"
 
   #
   # This is the user running the Apache server

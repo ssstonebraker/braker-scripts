@@ -500,5 +500,5 @@ append_line "Include /opt/modsecurity/etc/modsecurity.conf" /etc/apache2/apache2
 touch /opt/modsecurity/etc/rules-first.conf
 touch /opt/modsecurity/etc/rules.conf
 touch /opt/modsecurity/etc/rules-last.conf
-service apache2 restart
+/etc/init.d/apache2 restart
 }

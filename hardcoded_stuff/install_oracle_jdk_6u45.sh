@@ -14,15 +14,16 @@
 # SET PARAMS
 apt-get purge -y openjdk*
 JDK_FILE="jdk-6u45-linux-x64.bin"
-JDK_URL="http://download.oracle.com/otn-pub/java/jdk/6u45-b05/$JDK_FILE"
-JVM_VER="jdk1.6.0_45"
+JDK_URL="http://download.oracle.com/otn-pub/java/jdk/6u45-b06/$JDK_FILE"
 DIR_JVM="/usr/lib/jvm/"
 ORACLE_COOKIE="Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F"
 
 # Download and install jdk
 sudo mkdir /sjava && cd /sjava
-sudo wget --quiet --no-cookies --header "${ORACLE_COOKIE}" "${JDK_URL}"
+echo "downloading $JDK_FILE"
+sudo wget --quiet --no-cookies --no-check-certificate --header "${ORACLE_COOKIE}" "${JDK_URL}"
 sudo chmod a+x ${JDK_FILE}
+echo "installing java"
 yes | sudo ./${JDK_FILE}
 
 sudo mkdir -p ${DIR_JVM}

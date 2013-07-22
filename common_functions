@@ -528,8 +528,9 @@ apache_restart
 function install_mod_security_audit_console()
 {
 #This will install auditconsole (used with mod_security to view rules/logs)
+curl -s -O http://download.jwall.org/debian/chris.gpg
 apt-key add chris.gpg
-apt-get update
 append_line "deb http://download.jwall.org/debian/ jwall main" /etc/apt/sources.list
+apt-get update
 apt-get install -y auditconsole
 }

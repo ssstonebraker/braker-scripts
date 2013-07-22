@@ -15,7 +15,7 @@
 apt-get purge -y openjdk*
 JDK_FILE="jdk-6u45-linux-x64.bin"
 JDK_URL="http://download.oracle.com/otn-pub/java/jdk/6u45-b06/$JDK_FILE"
-DIR_JVM="/usr/lib/jvm/"
+DIR_JVM="/usr/lib/jvm"
 ORACLE_COOKIE="Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F"
 
 # Download and install jdk

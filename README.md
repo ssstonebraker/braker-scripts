@@ -30,7 +30,7 @@ This script will install the jwall audit console for modsecurity on an Ubuntu 12
 
 ####Usage
     curl -s -O https://raw.github.com/ssstonebraker/braker-scripts/master/hardcoded_stuff/install_mod_security_audit_console.sh
-    chmod +x
+    chmod +x install_mod_security_audit_console.sh
     ./install_mod_security_audit_console.sh
 
 ###change_hostname.sh

@@ -164,6 +164,85 @@ restart_service_mem_ge_x () {
 
 }
 ########################################
+require_not_empty()
+{
+        for var in $@; do
+                eval x="\$$var"
+                if [ -z "$x" ]; then
+                        echo "$var not set"
+                        exit 1
+                fi
+        done
+}
+
+require_dir()
+{
+        for var in $@; do
+                eval x="\$$var"
+                if [ ! -d "$x" ]; then
+                        echo "$var [$x]: directory not found"
+                        exit 1
+                fi
+        done
+}
+
+require_exist()
+{
+        for var in $@; do
+                eval x="\$$var"
+                if [ ! -e "$x" ]; then
+                        echo "$var [$x]: not found"
+                        exit 1
+                fi
+        done
+}
+
+####################################
+# exit program
+die()
+{
+        local msg="$1"
+
+                echo "$msg" >&2
+                exit 1
+}
+
+##############
+# Get Current Distro
+# return value of current distro
+# example usage: 
+# distro=$(get_distro)
+# if [ "$distro" = "ubuntu" ]; then
+#                db_stop || true
+#        fi
+
+get_distro()
+{
+        local out=$(lsb_release -is 2> /dev/null)
+
+        case $out in
+                RedHatEnterpriseServer)
+                        echo "redhat"
+                        ;;
+                CentOS)
+                        echo "redhat"
+                        ;;
+                Ubuntu)
+                        echo "ubuntu"
+                        ;;
+                *)
+                        # RHEL 6.0 did not have lsb_release, for example, and suse depends on qt3, libqt4, mesa, etc.
+                        # So adding lsb to our dependencies is kind of a pain
+                        if [ -e "/etc/redhat-release" ]; then
+                                echo "redhat"
+                        elif [ -e "/etc/SuSE-release" ] ; then
+                                echo "sles"
+                        else
+                                return 1
+                        fi
+        esac
+}
+
 ########################################
 kill_process_with_name () {
   #!/bin/sh
@@ -501,6 +580,7 @@ fi
 modsecurity_setup_opt_directories
 ########################################
 /bin/cp -f $build/$partial_path_modsec/modsecurity.conf-recommended /opt/modsecurity/etc/main.conf
+/bin/cp -f $build/$partial_path_modsec/mlogc/mlogc /opt/modsecurity/bin/mlogc
 cat <<EOF > /opt/modsecurity/etc/modsecurity.conf
 
 <IfModule mod_security2.c>
@@ -509,6 +589,8 @@ Include /opt/modsecurity/etc/rules-first.conf
 Include /opt/modsecurity/etc/rules.conf
 Include /opt/modsecurity/etc/rules-last.conf
 </IfModule>
+
+
 EOF
 #################################################
 #setup mod unique and modsecurity apache modules
@@ -523,8 +605,114 @@ touch /opt/modsecurity/etc/rules-first.conf
 touch /opt/modsecurity/etc/rules.conf
 touch /opt/modsecurity/etc/rules-last.conf
 apache_restart
+
+
+cat <<EOF > /opt/modsecurity/etc/mlogc.conf
+
+# Specify the folder where the logs will be created
+CollectorRoot /opt/modsecurity/var/log
+
+# Define what the log files will be called. You probably
+# won't ever change the names, but mlogc requires you
+# to define it.
+
+ErrorLog mlogc-error.log
+
+
+# The error log level is a number between 0 and 5, with
+# level 3 recommended for production (5 for troubleshooting).
+
+ErrorLogLevel 3
+
+
+# Specify the names of the data files. Similar comment as
+# above: you won't want to change these, but they are required.
+
+TransactionLog mlogc-transaction.log
+
+QueuePath mlogc-queue.log
+
+LockFile mlogc.lck
+
+
+# Where are the audit log entries created by ModSecurity?
+LogStorageDir /opt/modsecurity/var/audit
+
+# ModSecurity Console receiving URI. You can change the host
+# and the port parts but leave everything else as is.
+#
+ConsoleURI          "http://10.51.0.180:8080/rpc/auditLogReceiver"
+#
+# Sensor credentials
+#
+SensorUsername      "sensor"
+SensorPassword      "test"
+
+ How many parallel connections to use to talk to the server,
+# and how much to wait (in milliseconds) between submissions.
+# These two directives are used to control the rate at which
+# audit log entries are submitted.
+
+MaxConnections 10
+TransactionDelay 50
+
+# How many entries is a single thread allowed to process
+# before it must shut down.
+
+MaxWorkerRequests 1000
+
+# How long to wait at startup before really starting.
+StartupDelay 5000
+
+# Checkpoints are periods when the entries from the transaction
+# log (which is written to sequentially) are consolidated with
+# the entries in the main queue.
+
+CheckpointInterval 15
+
+# Back-off time after goes away or responds with a fatal error.
+ServerErrorTimeout 60
+EOF
+
+
 }
 
+function install_openjdk6()
+{
+apt-get purge -y openjdk*
+apt-get install openjdk-6-jre-headless
+################################################
+#Set java enviornment variable
+################################################
+grep -q 'JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64/' /etc/profile \
+|| sudo sh -c "echo 'JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64/' >> /etc/profile"
+export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64/
+ln -s /usr/lib/jvm/java-6-openjdk-amd64 /usr/lib/jvm/java-6-openjdk
+# source new variables
+. /etc/profile
+################################################
+
+
+
+}
+function install_remo() {
+mkdir -p /opt/remo
+curl -s -O http://remo.netnea.com/files/remo-0.2.0.tar.gz
+tar xzf remo-0.2.0.tar.gz && cd remo-0.2.0
+ruby script/server
+
+}
+function install_jwall_tools()
+{
+#This will install jwall-tools (used with mod_security to view rules/logs)
+curl -s -O http://download.jwall.org/debian/chris.gpg
+apt-key add chris.gpg
+append_line "deb http://download.jwall.org/debian/ jwall main" /etc/apt/sources.list
+apt-get update
+
+#install audit console
+apt-get install -y jwall-tools || print_error "jwall-tools failed to install"
+}
 function install_mod_security_audit_console()
 {
 #This will install auditconsole (used with mod_security to view rules/logs)
@@ -532,5 +720,67 @@ curl -s -O http://download.jwall.org/debian/chris.gpg
 apt-key add chris.gpg
 append_line "deb http://download.jwall.org/debian/ jwall main" /etc/apt/sources.list
 apt-get update
-apt-get install -y auditconsole
+
+#install java 6
+install_openjdk6
+
+#install audit console
+apt-get install -y auditconsole || print_error "auditconsole failed to install"
+
+#start on boot
+apt-get install -y chkconfig
+ln -s /usr/lib/insserv/insserv /sbin/insserv
+chkconfig auditconsole 345
+
+#Download and install MySQL Connnector
+current_directory=`pwd`
+curl -L 'http://www.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.25.tar.gz/from/http://mysql.he.net/' | \
+tar xz && print_good "Downloaded and extracted MySQL Connector" || print_error "Failed to download MySQL Connector"
+
+mysqljar="$current_directory/mysql-connector-java-5.1.25/mysql-connector-java-5.1.25-bin.jar"
+
+  if [ -e $mysqljar ]; then
+    mv $mysqljar /opt/AuditConsole/lib/mysql-connector-java-5.1.25-bin.jar
+    chown jwall:jwall /opt/AuditConsole/lib/mysql-connector-java-5.1.25-bin.jar
+    print_status "MySQL Connector Installed"
+    rm -Rf mysqljar
+    print_status "Restarting Audit Console"
+    service auditconsole restart
+  else
+    print_error "Failed to install MySQL Connector"
+  fi
+
+apt-get install -y binutils
+wacPassword=`strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 14 | tr -d '\n'; echo`
+
+print_status "DB: AuditConsoleDB"
+print_status "user: wacUser"
+print_status "pass: $wacPassword"
+
+
+#We ask the user for the root mysql user's password 3 times, one for each task.
+  print_notification "The next several steps will need you to enter the mysql root user password."
+
+  #1. If the database exists, we blow it away to ensure a clean install.
+
+  while true; do
+    print_notification "Enter the mysql root user password to create the AuditConsole database."
+    print_notification "If you already have a database named AuditConsoleDB, this WILL drop that database!"
+    mysql -u root -p -e "drop database if exists AuditConsoleDB; create database if not exists AuditConsoleDB; GRANT ALL ON AuditConsoleDB.* to wacUser@localhost IDENTIFIED BY '$wacPassword'; FLUSH PRIVILEGES; show databases;"
+    if [ $? != 0 ]; then
+      print_error "the command did NOT complete successfully. Please see $logfile, confirm the root mysql user password, and try again."
+      continue
+    else
+      print_good "AuditConsoleDB database created!"
+      break
+    fi
+  done
+mkdir /home/jwall
+chown -R jwall:jwall /home/jwall
+
+install_jwall_tools
+echo "config file at: /opt/AuditConsole/conf/AuditConsole.xml"
+
+jwall console-db-check /opt/AuditConsole
+  
 }

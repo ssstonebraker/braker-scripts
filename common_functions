@@ -696,10 +696,15 @@ ln -s /usr/lib/jvm/java-6-openjdk-amd64 /usr/lib/jvm/java-6-openjdk
 
 }
 function install_remo() {
-mkdir -p /opt/remo
-curl -s -O http://remo.netnea.com/files/remo-0.2.0.tar.gz
-tar xzf remo-0.2.0.tar.gz && cd remo-0.2.0
-ruby script/server
+apt-get install -y subversion
+aptitude install ruby irb libsqlite3-ruby1.8
+svn export --force http://svn.berlios.de/svnroot/repos/remo/trunk /opt/remo
+mv /opt/remo/remo/* /opt/remo
+rm -Rf /opt/remo/remo
+cd /opt/remo
+ruby script/server &
+
+echo "remo running at http://localhost:3000/main/index"
 
 }
 function install_jwall_tools()

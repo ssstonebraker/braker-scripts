@@ -14,6 +14,8 @@ echo "User Check"
           else
                echo "We are root."
      fi
-
+service elasticsearch stop
 curl -O "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.20.6.deb"
 dpkg -i elasticsearch-0.20.6.deb
+service elasticsearch stop
+service elasticsearch start

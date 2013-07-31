@@ -41,7 +41,7 @@ cat << 'EOF' > ${path_install}/config.js
 var config = new Settings(
 {
   
-  elasticsearch: 'http://localhost:9200',
+  elasticsearch: 'https://localhost:443',
   kibana_index:     "kibana-int",
   modules:          ['histogram','map','pie','table','filtering',
                     'timepicker','text','fields','hits','dashcontrol',
@@ -52,7 +52,7 @@ var config = new Settings(
 EOF
 
 replaceText localhost ${fqdn_es_server} ${path_install}/config.js
-replaceText 9200 443 ${path_install}/config.js
+
 
 cp ${path_install}/dashboards/logstash.json ${path_install}/dashboards/default.json
 cd ${path_install}/dashboards

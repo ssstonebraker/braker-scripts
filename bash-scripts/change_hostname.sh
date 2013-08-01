@@ -16,9 +16,9 @@ function system_update_hostname {
 	        echo "system_update_hostname() requires the system hostname as its first argument"
 	        return 1;
 	    fi
-	HOSTNAME=$1
-	HOST=`echo $HOSTNAME | sed 's/\(\[a-z0-9\]\)*\..*/\1/'`
-	HOSTS_LINE="`system_primary_ip`\t$HOSTNAME\t$HOST"
+	NEWHOSTNAME=$1
+	HOST=`echo $NEWHOSTNAME | sed 's/\(\[a-z0-9\]\)*\..*/\1/'`
+	HOSTS_LINE="`system_primary_ip`\t$NEWHOSTNAME\t$HOST"
 	echo "$HOST" > /etc/hostname
 	sed -i -e "s/^127\.0\.1\.1\s.*$/$HOSTS_LINE/" /etc/hosts
 	/bin/hostname -F /etc/hostname

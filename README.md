@@ -38,6 +38,6 @@ Easily change your hostname on any debian based distribution
 
 ###Security information and event management
 
-*install_aws_elasticsearch_cluster_node.sh
-*upgrade_logstash_to_1.1.13.sh
-*install_kibana3.sh
+* install_aws_elasticsearch_cluster_node.sh
+* upgrade_logstash_to_1.1.13.sh
+* install_kibana3.sh

@@ -111,12 +111,17 @@ function replaceText
 sed -i "s|${1}|${2}|g" "${3}"
 }
 ########################################
+# Returns 0 if list contains item
+# 
 listcontains() {
     for word in $1; do
 		[[ $word = $2 ]] && return 0
 	done
 	return 1
 }
+
+
+
 ########################################
 listcontains_SampleUsage () {
 #FIND OUT fruit TYPE
@@ -264,21 +269,84 @@ function psg {
   ps aux | grep "[$FIRST]$REST"
 }
 ########################################
+show_zombie_processes () {
+  ps aux | awk '{ print $8 " " $2 }' | grep -w Z
+}
+
+create_zombie_processes () {
+  time=${1:-60}
+  sleep 1 &
+  exec sleep $time
+}
+
 kill_zombie_processes () {
-        /bin/ps -elf | /usr/bin/awk '{print $2 " " $5}' | /bin/grep -w Z | /usr/bin/awk '{print $2}' | xargs kill -9
+  stat=`ps ax | awk '{print $1}' | grep -v "PID" | xargs -n 1 ps lOp | grep -v "UID" | awk '{print"pid: "$3" *** parent_pid: "$4" *** status: "$10" *** process: "$13}' | grep ": Z"`
+    if ((${#stat} > 0));then
+      ps ax | awk '{print $1}' | grep -v "PID" | xargs -n 1 ps lOp | grep -v "UID" | awk '{print$4" status:"$10}' | grep "status:Z" | awk '{print $1}' | xargs -n 1 kill -9
+      echo `date`": killed some zombie proceses!" >> /var/log/zombies.log
+    fi
+}
+
+########################################
+#Change hostname on a debian sytem
+#ex: system_update_hostname subdomain.example.com
+function system_update_hostname {
+   # system_update_hostname(system hostname)
+      if [ -z "$1" ]; then
+          echo "system_update_hostname() requires a hostname as its first argument"
+          return 1;
+      fi
+
+  #Existing hostname
+  old_hostname=$(cat /etc/hostname)
+
+  #user provided new hostname
+  new_hostname=$1
+
+  #Parse the hostname without any prepending domain
+  new_hostname_trimmed=$(echo $new_hostname | cut -d "." -f1)
+
+  # Make sure new hostname and old hostname are different
+  old_hostname=$(cat /etc/hostname)
+  if [ "$new_hostname_trimmed" == "$old_hostname" ]; then
+          print_error "new hostname and current hostname match!"
+          return 1
+  fi
+
+  # clean 127.0.0.1 line, removing occurances of current hostname
+  declare -a localhost_line=(`grep "127.0.0.1" /etc/hosts `);
+  declare -a old_127_trimmed=( ${localhost_line[@]/$old_hostname*/} )
+
+  # if the user didn't provide a FQDN then just append hostname they provided
+  if [ "$new_hostname" == "$new_hostname_trimmed" ]; then
+          new_127="${old_127_trimmed[@]} $new_hostname"
+
+  # if user provided a FQDN as hostname, append that and hostname
+  else
+          new_127="${old_127_trimmed[@]} $new_hostname $new_hostname_trimmed"
+  fi
+
+  # Create new hosts file with our new 127.0.0.1 line first
+  echo "${new_127}" > hosts.tmp
+  grep -v "127.0.0.1" /etc/hosts >> hosts.tmp
+
+  # Apply the new hosts file
+  mv hosts.tmp /etc/hosts
+
+  # Apply the new hostname
+  echo "${new_hostname_trimmed}" > /etc/hostname
+  echo "${new_hostname_trimmed}" > /proc/sys/kernel/hostname
+  /bin/hostname -F /etc/hostname
+  /etc/init.d/hostname restart >/dev/null 2>/dev/null
+  print_good "Hostname Changed: ${new_hostname_trimmed}"
+  print_good "/etc/hosts Modified: ${new_127}"
+  print_notification "Logout and then back in to see the new hostname in your bash prompt"
+  echo -e "\n"
 }
 ########################################
-function system_update_hostname {
-    # system_update_hostname(system hostname)
-    if [ -z "$1" ]; then
-        echo "system_update_hostname() requires the system hostname as its first argument"
-        return 1;
-    fi
-    echo $1 > /etc/hostname
-    hostname -F /etc/hostname
-    sed -i -e "s/^127\.0\.1\.1\s.*$/$$1/" /etc/hosts
-    /etc/init.d/hostname restart
-}
+
+
+
 function system_primary_ip {
   # returns the primary IP assigned to eth0
   echo $(ifconfig eth0 | awk -F: '/inet addr:/ {print $2}' | awk '{ print $1 }')

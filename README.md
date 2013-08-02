@@ -5,24 +5,6 @@ Scripts written by Steve Stonebraker for Administration
 
 ==============
 
-###ubuntu_change_hostname.sh
-Easily change your hostname on any debian based distribution
-
-
-###install_ipset_rules.sh
-Performs the following:
-
-1. Download your compressed rule hashes from an s3 bucket
-2. Decompress
-3. Install ipset
-4. Add rules
-5. Modify iptables to use the new rules
-
-###check_elastic_redis_running.sh
-
-* Ensure that Elastic Search and Redis are running
-* Start them if they are not running
-
 ###install_mod_security_2.7.4.sh
 This has only been tested on an Ubuntu precise (12.04) server.  This script will:
 
@@ -35,3 +17,27 @@ This has only been tested on an Ubuntu precise (12.04) server.  This script will
      
 ###install_mod_security_audit_console.sh
 Install the jwall audit console for modsecurity on an Ubuntu 12.04 machine
+
+
+###cidr_to_ipset.sh
+Converts a text file with a list of CIDR ip blocks in to a saved hashset.  
+
+Sample lists of CIDR blocks available for US, Great Britian, Spain, Italy, and France
+
+###install_ipset_rules.sh
+Performs the following:
+
+1. Download your compressed rule hashes from an s3 bucket
+2. Decompress
+3. Install ipset
+4. Add rules
+5. Modify iptables to use the new rules
+
+###ubuntu_change_hostname.sh
+Easily change your hostname on any debian based distribution
+
+###Security information and event management
+
+*install_aws_elasticsearch_cluster_node.sh
+*upgrade_logstash_to_1.1.13.sh
+*install_kibana3.sh

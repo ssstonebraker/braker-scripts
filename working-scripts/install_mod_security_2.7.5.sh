@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Author: Steve Stonebraker
-# Description: This will install mod_security 2.7.4
+# Description: This will install mod_security 2.7.5
 #            for ubuntu 12.04 precise
 #
 #
@@ -46,8 +46,8 @@ install_packages ${packages[@]}
 ########################################
 
 ########################################
-#Install Modsecurity version 2.7.4
-install_mod_security "2.7.4"
+#Install Modsecurity version 2.7.5
+install_mod_security "2.7.5"
 ########################################
 
 printline

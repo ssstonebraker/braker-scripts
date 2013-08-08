@@ -690,10 +690,10 @@ curl -o /opt/modsecurity/etc/mlogc.conf https://raw.github.com/ssstonebraker/bra
     read -p "AuditConsoleIP: " AUDIT_CONSOLE_IP
 
       print_notification "Provide Sensor Name"
-    read -p "AuditConsoleIP: " AUDIT_SENSORNAME
+    read -p "Sensor Name: " AUDIT_SENSORNAME
 
     print_notification "Provide Sensor Password"
-    read -p "AuditConsoleIP: " AUDIT_SENSORPASSWORD
+    read -p "Sensor Password: " AUDIT_SENSORPASSWORD
 
 replaceText "IPADDR" ${AUDIT_CONSOLE_IP} /opt/modsecurity/etc/mlogc.conf
 replaceText "SENSORNAME" ${AUDIT_SENSORNAME} /opt/modsecurity/etc/mlogc.conf

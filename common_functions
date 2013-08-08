@@ -711,9 +711,6 @@ replaceText "SENSORPASSWORD" ${AUDIT_SENSORPASSWORD} /opt/modsecurity/etc/mlogc.
 modsecurity_setup_opt_directories    
 apache_restart
 
-print_status "to test if your rule is working run this and check audit console:"
-print_status "curl -k http://localhost/?test=MY_UNIQUE_TEST_STRING"
-
 }
 
 function install_openjdk6()

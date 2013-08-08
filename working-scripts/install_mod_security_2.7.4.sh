@@ -28,6 +28,7 @@ fi
 ########################################
 proceed_if_root
 check_if_ubuntu_12
+
 ########################################
 #Setup Log file
 logfile=$ourPath/mod_security_install.log
@@ -49,8 +50,8 @@ install_packages ${packages[@]}
 install_mod_security "2.7.4"
 ########################################
 
-
 printline
-echo -e "To Test add this line to:/opt/modsecurity/etc/main.conf and look at /opt/modsecurity/var/log/debug.log\nSecRule ARGS MY_UNIQUE_TEST_STRING \"phase:2,log,deny,status:503,id:400023023\""
-
-
+print_status "to test if your rule is working run this and check audit console:";printline
+print_status "curl -k http://localhost/?test=MY_UNIQUE_TEST_STRING"
+print_status "To debug: /opt/modsecurity/var/log/debug.log";printline
+print_good "Install Complete!"

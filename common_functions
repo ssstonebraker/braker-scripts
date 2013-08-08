@@ -675,13 +675,7 @@ Include /opt/modsecurity/etc/rules-last.conf
 
 
 EOF
-#################################################
-#setup mod unique and modsecurity apache modules
-modsecurity_setup_apache_modules
-#################################################
-#Test if modules are loaded
-apache_is_module_loaded "security2_module"
-apache_is_module_loaded "unique_id_module"
+
 #################################################
 append_line "Include /opt/modsecurity/etc/modsecurity.conf" /etc/apache2/apache2.conf
 touch /opt/modsecurity/etc/rules-first.conf
@@ -707,7 +701,14 @@ replaceText "SENSORPASSWORD" ${AUDIT_SENSORPASSWORD} /opt/modsecurity/etc/mlogc.
 
 ########################################
 #Setup directory permissions
-modsecurity_setup_opt_directories    
+modsecurity_setup_opt_directories  
+#################################################
+#setup mod unique and modsecurity apache modules
+modsecurity_setup_apache_modules
+#################################################
+#Test if modules are loaded
+apache_is_module_loaded "security2_module"
+apache_is_module_loaded "unique_id_module"  
 apache_restart
 
 }

@@ -663,7 +663,7 @@ fi
 #Setup directory Layout
 modsecurity_setup_opt_directories
 ########################################
-/bin/cp -f $build/$partial_path_modsec/modsecurity.conf-recommended /opt/modsecurity/etc/main.conf
+#/bin/cp -f $build/$partial_path_modsec/modsecurity.conf-recommended /opt/modsecurity/etc/main.conf
 /bin/cp -f $build/$partial_path_modsec/mlogc/mlogc /opt/modsecurity/bin/mlogc
 cat <<EOF > /opt/modsecurity/etc/modsecurity.conf
 
@@ -688,76 +688,31 @@ append_line "Include /opt/modsecurity/etc/modsecurity.conf" /etc/apache2/apache2
 touch /opt/modsecurity/etc/rules-first.conf
 touch /opt/modsecurity/etc/rules.conf
 touch /opt/modsecurity/etc/rules-last.conf
+curl -o /opt/modsecurity/etc/main.conf https://raw.github.com/ssstonebraker/braker-scripts/master/working-scripts/modsecurity_conf_files/main.conf
+curl -o /opt/modsecurity/etc/mlogc.conf https://raw.github.com/ssstonebraker/braker-scripts/master/working-scripts/modsecurity_conf_files/mlogc.conf
+
+#################################################
+#Configure connection to jWall AuditConsole
+    print_notification "Provide IP address of auditconsole"
+    read -p "AuditConsoleIP: " AUDIT_CONSOLE_IP
+
+      print_notification "Provide Sensor Name"
+    read -p "AuditConsoleIP: " AUDIT_SENSORNAME
+
+    print_notification "Provide Sensor Password"
+    read -p "AuditConsoleIP: " AUDIT_SENSORPASSWORD
+
+replaceText "IPADDR" ${AUDIT_CONSOLE_IP} /opt/modsecurity/etc/mlogc.conf
+replaceText "SENSORNAME" ${AUDIT_SENSORNAME} /opt/modsecurity/etc/mlogc.conf
+replaceText "SENSORPASSWORD" ${AUDIT_SENSORPASSWORD} /opt/modsecurity/etc/mlogc.conf
+
+########################################
+#Setup directory permissions
+modsecurity_setup_opt_directories    
 apache_restart
 
-
-cat <<EOF > /opt/modsecurity/etc/mlogc.conf
-
-# Specify the folder where the logs will be created
-CollectorRoot /opt/modsecurity/var/log
-
-# Define what the log files will be called. You probably
-# won't ever change the names, but mlogc requires you
-# to define it.
-
-ErrorLog mlogc-error.log
-
-
-# The error log level is a number between 0 and 5, with
-# level 3 recommended for production (5 for troubleshooting).
-
-ErrorLogLevel 3
-
-
-# Specify the names of the data files. Similar comment as
-# above: you won't want to change these, but they are required.
-
-TransactionLog mlogc-transaction.log
-
-QueuePath mlogc-queue.log
-
-LockFile mlogc.lck
-
-
-# Where are the audit log entries created by ModSecurity?
-LogStorageDir /opt/modsecurity/var/audit
-
-# ModSecurity Console receiving URI. You can change the host
-# and the port parts but leave everything else as is.
-#
-ConsoleURI          "http://10.51.0.180:8080/rpc/auditLogReceiver"
-#
-# Sensor credentials
-#
-SensorUsername      "sensor"
-SensorPassword      "test"
-
- How many parallel connections to use to talk to the server,
-# and how much to wait (in milliseconds) between submissions.
-# These two directives are used to control the rate at which
-# audit log entries are submitted.
-
-MaxConnections 10
-TransactionDelay 50
-
-# How many entries is a single thread allowed to process
-# before it must shut down.
-
-MaxWorkerRequests 1000
-
-# How long to wait at startup before really starting.
-StartupDelay 5000
-
-# Checkpoints are periods when the entries from the transaction
-# log (which is written to sequentially) are consolidated with
-# the entries in the main queue.
-
-CheckpointInterval 15
-
-# Back-off time after goes away or responds with a fatal error.
-ServerErrorTimeout 60
-EOF
-
+print_status "to test if your rule is working run this and check audit console:"
+print_status "curl -k http://localhost/?test=MY_UNIQUE_TEST_STRING"
 
 }
 

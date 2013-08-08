@@ -78,7 +78,7 @@ function whatPackageProvides() {
 #      #to do
 #      return 1
 #  fi
-}
+#}
 #######################################
 function checkProgramIsInEnvironment
 {

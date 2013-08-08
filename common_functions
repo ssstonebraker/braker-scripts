@@ -69,15 +69,15 @@ function install_packages() {
 function whatPackageProvides() {
 # apt-get install apt-file
 # apt-file update
-  distro=$(get_distro)
-  if [ "$distro" = "ubuntu" ]; then
-                  which apt-file >/dev/null || { apt-get install -y apt-file;  apt-file update; }
-                  unset i; IFS=$'\x0a'; select i in $( apt-file search "/$@" ); do 
-                  test -n "$i" || break; apt-get install "${i%% *}"; done
-  elif [ "$distro" = "redhat" ]
-      #to do
-      return 1
-  fi
+#  distro=$(get_distro)
+#  if [ "$distro" = "ubuntu" ]; then
+#                  which apt-file >/dev/null || { apt-get install -y apt-file;  apt-file update; }
+#                  unset i; IFS=$'\x0a'; select i in $( apt-file search "/$@" ); do 
+#                  test -n "$i" || break; apt-get install "${i%% *}"; done
+#  elif [ "$distro" = "redhat" ]
+#      #to do
+#      return 1
+#  fi
 }
 #######################################
 function checkProgramIsInEnvironment

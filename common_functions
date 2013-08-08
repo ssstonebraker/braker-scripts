@@ -45,17 +45,6 @@ hr=---------------------------------------------------------------\
 printf '%s\n' "${hr:0:${COLUMNS:-$(tput cols)}}"
 }
 ########################################    
-function install_packages()
-{
- apt-get update &>> $logfile && apt-get install -y ${@} &>> $logfile
- if [ $? -eq 0 ]; then
-  print_good "Packages successfully installed."
- else
-  print_error "Packages failed to install!"
-  exit 1
- fi
-}
-########################################    
 function proceed_if_root()
 {
 #Make sure only root can run our script
@@ -64,7 +53,32 @@ function proceed_if_root()
            exit 1
         fi
 }
+########################################    
+# Install a list of packages on debian or redhat as appropriate
+function install_packages() {
+  if which dpkg &> /dev/null; then
+    apt-get update
+    apt-get -y install $@
+  elif which rpm &> /dev/null; then
+    yum install -y $@
+  else
+    echo "No package manager found."
+  fi
+}
 
+function whatPackageProvides() {
+# apt-get install apt-file
+# apt-file update
+  distro=$(get_distro)
+  if [ "$distro" = "ubuntu" ]; then
+                  which apt-file >/dev/null || { apt-get install -y apt-file;  apt-file update; }
+                  unset i; IFS=$'\x0a'; select i in $( apt-file search "/$@" ); do 
+                  test -n "$i" || break; apt-get install "${i%% *}"; done
+  elif [ "$distro" = "redhat" ]
+      #to do
+      return 1
+  fi
+}
 #######################################
 function checkProgramIsInEnvironment
 {
@@ -81,6 +95,8 @@ function checkProgramIsInEnvironment
     print_status "package ${1} present"
   fi
 }
+#Find out which debian package a command (executable) belongs to on debian-based distros
+function whichpkg() { readlink -f "$(which $1)" | xargs --no-run-if-empty dpkg -S; }
 ########################################
 function install_packages_ipset_s3cmd()
 {

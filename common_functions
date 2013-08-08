@@ -545,7 +545,6 @@ function modsecurity_setup_apache_modules {
   echo -e "# Load Lua\nLoadFile /usr/lib/liblua5.1.so" >> /etc/apache2/mods-available/security2.load
   echo -e "# Finally, load ModSecurity\nLoadModule security2_module /usr/lib/apache2/modules/mod_security2.so" >> /etc/apache2/mods-available/security2.load
   a2enmod security2
-  apache_restart
 }
 ########################################
 # Setup directories for a mod_security_installation

@@ -41,3 +41,22 @@ Easily change your hostname on any debian based distribution
 * install_aws_elasticsearch_cluster_node.sh
 * upgrade_logstash_to_1.1.13.sh
 * install_kibana3.sh
+
+###aws_fix_dual_nic_routing.sh
+#### Add two network interface in ubuntu 12.04 in aws and route traffic properly to either ip
+#### Scope: Amazon EC2 Attach Elastic Network Interface (VPC)
+
+#### Automates this manual process (from 4-10)
+
+1.  Start AMI in VPC
+2.  After boot attach secondary nic
+3.  Ensure both nic's have an external IP associated with it
+4.  configure new /etc/network/interfaces
+5.  restart networking
+6.  stop network-manger
+7.  ssh back in (ssh will flip to the other elastic ip)
+8.  add new ip route
+9.  flush ip route table
+10. restart networking
+
+More details at aws-add-two-network-interfaces-in-ubuntu-12-04-precise

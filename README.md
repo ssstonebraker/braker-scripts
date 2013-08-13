@@ -59,4 +59,4 @@ Easily change your hostname on any debian based distribution
 9.  flush ip route table
 10. restart networking
 
-More details at aws-add-two-network-interfaces-in-ubuntu-12-04-precise
+More details at http://brakertech.com/aws-add-two-network-interfaces-in-ubuntu-12-04-precise/

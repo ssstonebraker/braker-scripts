@@ -1,0 +1,4 @@
+echo PATH=$PATH > tmp.cron
+echo >> tmp.cron
+crontab -l >> tmp.cron
+crontab tmp.cron

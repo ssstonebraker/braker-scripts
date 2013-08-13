@@ -360,9 +360,21 @@ function system_update_hostname {
   echo -e "\n"
 }
 ########################################
+function system_is_link_up () {
+  #determines if interface is up
+  iface=$1
+  ip link show dev ${iface}
+  if [ "$?" != "0" ]; then
+    echo "CRITICAL - interface '${iface}' does NOT EXIST!"
+    exit 2
+  fi
+}
 
-
-
+function system_print_ip_for_interface {
+  # returns the  IP assigned to interface passed
+  # ex: system_print_ip_for_interface eth0
+  echo $(ifconfig $1 | awk -F: '/inet addr:/ {print $2}' | awk '{ print $1 }')
+}
 function system_primary_ip {
   # returns the primary IP assigned to eth0
   echo $(ifconfig eth0 | awk -F: '/inet addr:/ {print $2}' | awk '{ print $1 }')

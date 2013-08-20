@@ -43,8 +43,8 @@ Easily change your hostname on any debian based distribution
 * install_kibana3.sh
 
 ###aws_fix_dual_nic_routing.sh
-#### Add two network interface in ubuntu 12.04 in aws and route traffic properly to either ip
-#### Scope: Amazon EC2 Attach Elastic Network Interface (VPC)
+* Add two network interface in ubuntu 12.04 in aws and route traffic properly to either ip
+* Scope: Amazon EC2 Attach Elastic Network Interface (VPC)
 
 #### Automates this manual process (from 4-10)
 
@@ -60,3 +60,11 @@ Easily change your hostname on any debian based distribution
 10. restart networking
 
 More details at http://brakertech.com/aws-add-two-network-interfaces-in-ubuntu-12-04-precise/
+
+
+###shred_self.sh
+Example script will shred itself once ran
+
+###shred_self_and_dir.sh
+Example script will shred itself and the current directory (if empty)
+

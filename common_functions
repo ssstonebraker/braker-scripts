@@ -167,6 +167,18 @@ restart_service_mem_ge_x () {
         fi
 
 }
+#########################################################################    
+# if directory exists remove it
+function delete_dir_if_exist {
+  [ -d $1 ] && rm --preserve-root -rf $1
+}
+#########################################################################    
+# if directory exists remove contents and recreate
+function delete_dir_contents_if_exist {
+  [ -d $1 ] && print_status "found dir $1, removing contents"
+  [ -d $1 ] && rm --preserve-root -rf $1 
+  mkdir -p $1 || die "unable to create directory $1"
+}
 ########################################
 require_not_empty()
 {

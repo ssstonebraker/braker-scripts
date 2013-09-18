@@ -1,4 +1,17 @@
 #!/bin/bash
+#
+# Name: beaver_ensure_running.sh
+# Author: Steve Stonebraker
+# Date: 9/18/2013
+# https://raw.github.com/ssstonebraker/braker-scripts/master/working-scripts/beaver_ensure_running.sh
+#
+# When running in crontab please make sure you set it up like this
+#
+# SHELL=/bin/bash
+# PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# */1 * * * * /bin/bash beaver_ensure_running.sh
+
+
 START=false
 readarray -t PIDS < <(exec pgrep -x beaver)
 

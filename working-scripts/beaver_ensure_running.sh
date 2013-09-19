@@ -1,16 +1,10 @@
 #!/bin/bash
-#
+# Author: Steve Stonebrkaer
+# Date: 9/19/2013
 # Name: beaver_ensure_running.sh
-# Author: Steve Stonebraker
-# Date: 9/18/2013
-# https://raw.github.com/ssstonebraker/braker-scripts/master/working-scripts/beaver_ensure_running.sh
 #
-# When running in crontab please make sure you set it up like this
-#
-# SHELL=/bin/bash
-# PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-# */1 * * * * /bin/bash beaver_ensure_running.sh
-
+# If running from cron ensure you define path variables:
+# */10 * * * * /bin/bash /root/beaver_ensure_running.sh
 
 START=false
 readarray -t PIDS < <(exec pgrep -x beaver)
@@ -29,6 +23,10 @@ if [[ ${#PIDS[@]} -eq 0 ]]; then
 elif [[ ${#PIDS[@]} -eq 1 ]]; then
     echo "Processes found: ${PIDS[*]}"
     echo "Only one beaver process found."
+    stop_beaver
+elif [[ ${#PIDS[@]} -gt 2 ]]; then
+    echo "Processes found: ${PIDS[*]}"
+    echo "more than two processes found."
     stop_beaver
 elif ps -fp "${PIDS[@]}" | fgrep -F '<defunct>' >/dev/null; then
     echo "Processes found: ${PIDS[*]}"

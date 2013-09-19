@@ -766,7 +766,7 @@ function install_jwall_tools()
 #This will install jwall-tools (used with mod_security to view rules/logs)
 curl -s -O http://download.jwall.org/debian/chris.gpg
 apt-key add chris.gpg
-append_line "deb http://download.jwall.org/debian/jwall main" /etc/apt/sources.list
+append_line "deb http://download.jwall.org/debian/ jwall main" /etc/apt/sources.list
 apt-get update
 
 #install audit console

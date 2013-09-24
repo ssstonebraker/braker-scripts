@@ -49,6 +49,24 @@ function install_packages {
   fi
 }
 ########################################    
+# 
+function apache_tune {
+# Tunes Apache's memory to use the percentage of RAM you specify, defaulting to 40%
+# $1 - the percent of system memory to allocate towards Apache
+if [ ! -n "$1" ];
+    then PERCENT=40
+    else PERCENT="$1"
+fi
+PERPROCMEM=$(ps aux | grep 'apache2' | awk '{print $6/1024;}' | awk '{avg += ($1 - avg) / NR;} END {print avg;}' OFMT="%3.0f") # the amount of memory in MB each apache process is likely to utilize
+MEM=$(grep MemTotal /proc/meminfo | awk '{ print int($2/1024) }') # how much memory in MB this system has
+MAXCLIENTS=$((MEM*PERCENT/100/PERPROCMEM)) # calculate MaxClients
+MAXCLIENTS=${MAXCLIENTS/.*} # cast to an integer
+sed -i -e "s/\(^[ \t]*MaxClients[ \t]*\)[0-9]*/\1$MAXCLIENTS/" /etc/apache2/apache2.conf
+apachectl restart
+}
+
+########################################   
+########################################    
 # show progress bar
 # usage: in a loop use it like this
 # showbar $<counter variable> $<total iterations>

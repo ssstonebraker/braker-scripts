@@ -1,0 +1,24 @@
+
+# create the logrotate file for the logstash indexer
+
+cat <<'EOF' > /etc/logrotate.d/openidm-server-out
+# filename: /etc/logrotate.d/openidm-server-out
+# Invoke Manually: /usr/sbin/logrotate /etc/logrotate.conf
+/opt/openidm/logs/server.out{
+    daily
+    size=50k
+    missingok
+    rotate 2
+    compress
+    notifempty
+    copytruncate
+}
+
+# See how big the log is before you rotate
+ls -lh /opt/openidm/logs/server.out
+
+# Manually invoke logrotate
+/usr/sbin/logrotate -d /etc/logrotate.conf
+
+# See how big the log is after you rotate
+ls -lh /var/log/logstash/central.log

@@ -1,26 +1,57 @@
 
 # create the logrotate file for the logstash indexer
 
+
 cat <<'EOF' > /etc/logrotate.d/logstash-indexer
 # filename: /etc/logrotate.d/logstash-indexer
 # Invoke Manually: /usr/sbin/logrotate /etc/logrotate.conf
 /var/log/logstash/*.log{
-    daily
-    size=50M
+    weekly
+    size=5000M
     missingok
     rotate 2
     compress
     notifempty
     copytruncate
      prerotate
-        stop logstash-central
+        stop logstash-central1
+        stop logstash-central2
+        stop logstash-central3
+        stop logstash-central4
+        stop logstash-central5
+        stop logstash-central6
+        stop logstash-central7
+        stop logstash-central8
+        stop logstash-central9
+        stop logstash-central10
+        stop logstash-central11
+        stop logstash-central12
+        stop logstash-central13
+        stop logstash-central14   
      endscript
 
      postrotate
-        start logstash-central
+        start logstash-central1
+        start logstash-central2
+        start logstash-central3
+        start logstash-central4
+        start logstash-central5
+        start logstash-central6
+        start logstash-central7
+        start logstash-central8
+        start logstash-central9
+        start logstash-central10
+        start logstash-central11
+        start logstash-central12
+        start logstash-central13
+        start logstash-central14
      endscript
 }
 EOF
+
+
+perl -pi -e 's|1024|640|g' ./logstash-central*
+
 
 # See how big the log is before you rotate
 ls -lh /var/log/logstash/central.log

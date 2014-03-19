@@ -1,9 +1,18 @@
 braker-scripts
 ==============
 
-Scripts written by Steve Stonebraker for Administration
+Scripts written by Steve Stonebraker for Administration & Simluations
 
 ==============
+###ddos_ntp.pl
+NTP Reflection and Amplification attack simlator
+
+Requires:
+* Net::RawIP
+* System capable of sending raw packets
+
+###listmodules.pl
+Displays currently installed perl modules
 
 ###install_mod_security_2.7.4.sh
 This has only been tested on an Ubuntu precise (12.04) server.  This script will:

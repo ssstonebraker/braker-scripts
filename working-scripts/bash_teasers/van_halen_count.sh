@@ -4,7 +4,7 @@
 #
 # Author: Steve Stonebraker
 # Date: 3-27-2013
-# Desc: Totals the number of times "David" or "Sammy"
+# Desc: Totals the number of times "David Lee Roth" or "Sammy Hagar"
 #       appear on the Jellyvision employee bio pages
 #
 #
@@ -23,7 +23,7 @@ count_string_in_file () {
 curl --silent http://www.jellyvision.com/team/ | egrep -o "http:\/\/www\.jellyvision\.com\/team\/([^\/]+)\/" > ${employees}
 
 # Cut all occurances of david or sammy from each employees bio page
-tail -n +5 ${employees} | xargs -n 1 -P $LIMIT -I{} bash -c "curl --silent {} | egrep -o -i 'david|sammy' " > /tmp/output
+tail -n +5 ${employees} | xargs -n 1 -P $LIMIT -I{} bash -c "curl --silent {} | egrep -o -i 'david lee roth|sammy hagar' " > /tmp/output
 
 echo "The Right Answer Totals:"
 count_string_in_file "David"

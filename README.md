@@ -31,7 +31,7 @@ Install the jwall audit console for modsecurity on an Ubuntu 12.04 machine
 ###cidr_to_ipset.sh
 Converts a text file with a list of CIDR ip blocks in to a saved hashset.  
 
-Sample lists of CIDR blocks available for US, Great Britian, Spain, Italy, and France
+Sample lists of CIDR blocks available for US, Great Britain, Spain, Italy, and France
 
 ###install_ipset_rules.sh
 Performs the following:

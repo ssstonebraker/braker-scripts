@@ -11,10 +11,10 @@ Requires:
 * Net::RawIP
 * System capable of sending raw packets
 
-###listmodules.pl
+### listmodules.pl
 Displays currently installed perl modules
 
-###install_mod_security_2.7.4.sh
+### install_mod_security_2.7.4.sh
 This has only been tested on an Ubuntu precise (12.04) server.  This script will:
 
 * Download the source code for Modsecurity version 2.7.4
@@ -24,16 +24,16 @@ This has only been tested on an Ubuntu precise (12.04) server.  This script will
 * Enable the relevant Apache Modules
 
      
-###install_mod_security_audit_console.sh
+### install_mod_security_audit_console.sh
 Install the jwall audit console for modsecurity on an Ubuntu 12.04 machine
 
 
-###cidr_to_ipset.sh
+### cidr_to_ipset.sh
 Converts a text file with a list of CIDR ip blocks in to a saved hashset.  
 
 Sample lists of CIDR blocks available for US, Great Britain, Spain, Italy, and France
 
-###install_ipset_rules.sh
+### install_ipset_rules.sh
 Performs the following:
 
 1. Download your compressed rule hashes from an s3 bucket
@@ -42,20 +42,20 @@ Performs the following:
 4. Add rules
 5. Modify iptables to use the new rules
 
-###ubuntu_change_hostname.sh
+### ubuntu_change_hostname.sh
 Easily change your hostname on any debian based distribution
 
-###Security information and event management
+### Security information and event management
 
 * install_aws_elasticsearch_cluster_node.sh
 * upgrade_logstash_to_1.1.13.sh
 * install_kibana3.sh
 
-###aws_fix_dual_nic_routing.sh
+### aws_fix_dual_nic_routing.sh
 * Add two network interface in ubuntu 12.04 in aws and route traffic properly to either ip
 * Scope: Amazon EC2 Attach Elastic Network Interface (VPC)
 
-#### Automates this manual process (from 4-10)
+### # Automates this manual process (from 4-10)
 
 1.  Start AMI in VPC
 2.  After boot attach secondary nic
@@ -71,9 +71,9 @@ Easily change your hostname on any debian based distribution
 More details at http://brakertech.com/aws-add-two-network-interfaces-in-ubuntu-12-04-precise/
 
 
-###shred_self.sh
+### shred_self.sh
 Example script will shred itself once ran
 
-###shred_self_and_dir.sh
+### shred_self_and_dir.sh
 Example script will shred itself and the current directory (if empty)
 

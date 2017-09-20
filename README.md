@@ -4,7 +4,7 @@ braker-scripts
 Scripts written by Steve Stonebraker for Administration & Simluations
 
 ==============
-###ddos_ntp.pl
+### ddos_ntp.pl
 NTP Reflection and Amplification attack simlator
 
 Requires:

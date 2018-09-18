@@ -5,7 +5,7 @@
 # File: add_current_shell_and_path_to_crontab.sh
 # Description: Add current user's shell and path to crontab
 # Source: http://brakertech.com/add-current-path-to-crontab
-# Github: hhttps://github.com/ssstonebraker/braker-scripts/blob/master/working-scripts/add_current_shell_and_path_to_crontab.sh
+# Github: https://github.com/ssstonebraker/braker-scripts/blob/master/working-scripts/add_current_shell_and_path_to_crontab.sh
 
 # function that is called when the script exits (cleans up our tmp.cron file)
 function finish { [ -e "tmp.cron" ] && rm tmp.cron; }

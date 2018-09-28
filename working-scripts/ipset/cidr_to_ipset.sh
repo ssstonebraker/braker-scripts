@@ -5,7 +5,7 @@
 # Author: Steve Stonebraker
 # Site: brakertech.com
 #
-# You can optain a list of cidr ip blocks
+# You can obtain a list of cidr ip blocks
 # by country at
 # http://www.ip2location.com/free/visitor-blocker
 #

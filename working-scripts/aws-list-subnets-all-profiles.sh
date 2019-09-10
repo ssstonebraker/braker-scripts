@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename: aws-list-subets-all-profiles.sh
+# Filename: aws-list-subnets-all-profiles.sh
 # Description: print subnets from all vpcs across all profiles to a txt file
 # Usage: ./aws-list-subets-all-profiles.sh
 # Output: all_subnets.txt

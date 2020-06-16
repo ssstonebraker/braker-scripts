@@ -4,6 +4,9 @@ braker-scripts
 Scripts written by Steve Stonebraker for Administration & Simluations
 
 ==============
+### add_current_shell_and_path_to_crontab.sh
+Will add the ${PATH} of the current shell to the crontab
+
 ### ddos_ntp.pl
 NTP Reflection and Amplification attack simlator
 

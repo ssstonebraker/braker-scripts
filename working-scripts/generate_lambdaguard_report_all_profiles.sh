@@ -3,6 +3,8 @@
 # Author: Steve Stonebraker
 # Date 2020-06-16
 # Script Name: generate_lambdaguard_report_all_profiles.sh
+# Raw location: https://raw.githubusercontent.com/ssstonebraker/braker-scripts/master/working-scripts/generate_lambdaguard_report_all_profiles.sh
+#
 #
 # Description:
 # This script will generate a lambdaguard report for all profiles defined in ~/.aws/config

@@ -11,6 +11,9 @@ Requires:
 * Net::RawIP
 * System capable of sending raw packets
 
+### generate_lambdaguard_report_all_profiles.sh
+Generates a lambdaguard report for all profiles listed in ~/.aws/config
+
 ### listmodules.pl
 Displays currently installed perl modules
 

@@ -14,7 +14,8 @@ OUTDIR="${PWD}/report"
 echo "Output dir: ${OUTDIR}"
 
 # remove existing output directory 
-if [ -d ./"${OUTDIR}" ]; then 
+if [ -d "${OUTDIR}" ]; then 
+   echo "[*] - Existing output dir found... removing"
    /bin/rm -f ./"${OUTDIR}"/* 2>/dev/null
 fi
 

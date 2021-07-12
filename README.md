@@ -7,6 +7,12 @@ Scripts written by Steve Stonebraker for Administration & Simluations
 ### add_current_shell_and_path_to_crontab.sh
 Will add the ${PATH} of the current shell to the crontab
 
+### aws-list-subnets-all-profiles.sh
+print subnets from all vpcs across all profiles to a txt file
+
+### aws-route53-saml2aws-all-account-backup.sh
+Exports all route53 zones across all AWS accounts
+
 ### ddos_ntp.pl
 NTP Reflection and Amplification attack simlator
 

@@ -67,7 +67,7 @@ Easily change your hostname on any debian based distribution
 * Add two network interface in ubuntu 12.04 in aws and route traffic properly to either ip
 * Scope: Amazon EC2 Attach Elastic Network Interface (VPC)
 
-### # Automates this manual process (from 4-10)
+Automates this manual process (from 4-10)
 
 1.  Start AMI in VPC
 2.  After boot attach secondary nic

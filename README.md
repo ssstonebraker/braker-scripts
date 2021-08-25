@@ -4,64 +4,12 @@ braker-scripts
 Scripts written by Steve Stonebraker for Administration & Simluations
 
 ==============
-### add_current_shell_and_path_to_crontab.sh
-Will add the ${PATH} of the current shell to the crontab
 
-### aws-list-subnets-all-profiles.sh
-print subnets from all vpcs across all profiles to a txt file
+## AWS SCRIPTS
+Scripts written for interaction with the AWS cli
 
-### aws-route53-saml2aws-all-account-backup.sh
-Exports all route53 zones across all AWS accounts
-
-### ddos_ntp.pl
-NTP Reflection and Amplification attack simlator
-
-Requires:
-* Net::RawIP
-* System capable of sending raw packets
-
-### generate_lambdaguard_report_all_profiles.sh
-Generates a lambdaguard report for all profiles listed in ~/.aws/config
-
-### listmodules.pl
-Displays currently installed perl modules
-
-### install_mod_security_2.7.4.sh
-This has only been tested on an Ubuntu precise (12.04) server.  This script will:
-
-* Download the source code for Modsecurity version 2.7.4
-* Ensure all required prerequisites are installed
-* Install ModSecurity to /opt/modsecurity
-* Create the recommended folder structure (from the ModSecurity book) under /opt/modsecurity
-* Enable the relevant Apache Modules
-
-     
-### install_mod_security_audit_console.sh
-Install the jwall audit console for modsecurity on an Ubuntu 12.04 machine
-
-
-### cidr_to_ipset.sh
-Converts a text file with a list of CIDR ip blocks in to a saved hashset.  
-
-Sample lists of CIDR blocks available for US, Great Britain, Spain, Italy, and France
-
-### install_ipset_rules.sh
-Performs the following:
-
-1. Download your compressed rule hashes from an s3 bucket
-2. Decompress
-3. Install ipset
-4. Add rules
-5. Modify iptables to use the new rules
-
-### ubuntu_change_hostname.sh
-Easily change your hostname on any debian based distribution
-
-### Security information and event management
-
-* install_aws_elasticsearch_cluster_node.sh
-* upgrade_logstash_to_1.1.13.sh
-* install_kibana3.sh
+### aws-find-missing-accounts-in-credentials-file.sh
+print accounts that exist remotely but do not exist in ~/.credentials file
 
 ### aws_fix_dual_nic_routing.sh
 * Add two network interface in ubuntu 12.04 in aws and route traffic properly to either ip
@@ -82,6 +30,73 @@ Automates this manual process (from 4-10)
 
 More details at http://brakertech.com/aws-add-two-network-interfaces-in-ubuntu-12-04-precise/
 
+### aws-list-subnets-all-profiles.sh
+print subnets from all vpcs across all profiles to a txt file
+
+### aws-route53-saml2aws-all-account-backup.sh
+Exports all route53 zones across all AWS accounts
+
+
+### add_current_shell_and_path_to_crontab.sh
+Will add the ${PATH} of the current shell to the crontab
+
+### generate_lambdaguard_report_all_profiles.sh
+Generates a lambdaguard report for all profiles listed in ~/.aws/config
+
+
+## Perl
+### ddos_ntp.pl
+NTP Reflection and Amplification attack simlator
+
+Requires:
+* Net::RawIP
+* System capable of sending raw packets
+
+
+### listmodules.pl
+Displays currently installed perl modules
+
+## ModSecurity
+
+### install_mod_security_2.7.4.sh
+This has only been tested on an Ubuntu precise (12.04) server.  This script will:
+
+* Download the source code for Modsecurity version 2.7.4
+* Ensure all required prerequisites are installed
+* Install ModSecurity to /opt/modsecurity
+* Create the recommended folder structure (from the ModSecurity book) under /opt/modsecurity
+* Enable the relevant Apache Modules
+
+     
+### install_mod_security_audit_console.sh
+Install the jwall audit console for modsecurity on an Ubuntu 12.04 machine
+
+
+### Security information and event management
+
+* install_aws_elasticsearch_cluster_node.sh
+* upgrade_logstash_to_1.1.13.sh
+* install_kibana3.sh
+
+## Other
+
+
+### cidr_to_ipset.sh
+Converts a text file with a list of CIDR ip blocks in to a saved hashset.  
+
+Sample lists of CIDR blocks available for US, Great Britain, Spain, Italy, and France
+
+### install_ipset_rules.sh
+Performs the following:
+
+1. Download your compressed rule hashes from an s3 bucket
+2. Decompress
+3. Install ipset
+4. Add rules
+5. Modify iptables to use the new rules
+
+### ubuntu_change_hostname.sh
+Easily change your hostname on any debian based distribution
 
 ### shred_self.sh
 Example script will shred itself once ran

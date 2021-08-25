@@ -36,10 +36,6 @@ print subnets from all vpcs across all profiles to a txt file
 ### aws-route53-saml2aws-all-account-backup.sh
 Exports all route53 zones across all AWS accounts
 
-
-### add_current_shell_and_path_to_crontab.sh
-Will add the ${PATH} of the current shell to the crontab
-
 ### generate_lambdaguard_report_all_profiles.sh
 Generates a lambdaguard report for all profiles listed in ~/.aws/config
 
@@ -80,6 +76,9 @@ Install the jwall audit console for modsecurity on an Ubuntu 12.04 machine
 
 ## Other
 
+
+### add_current_shell_and_path_to_crontab.sh
+Will add the ${PATH} of the current shell to the crontab
 
 ### cidr_to_ipset.sh
 Converts a text file with a list of CIDR ip blocks in to a saved hashset.  

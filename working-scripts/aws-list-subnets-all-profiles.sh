@@ -5,9 +5,9 @@
 # Output: all_subnets.txt
 # Author: Steve Stonebraker
 
-aws_profiles=$( \
-        grep '\[profile' ~/.aws/config \
-        | awk '{sub(/]/, "", $2); print $2}' \
+aws_profiles=$(
+  grep '\[' ~/.aws/credentials \
+  |  tr -d \ []
 )
 
 for profile in ${aws_profiles}

@@ -85,6 +85,11 @@ Converts a text file with a list of CIDR ip blocks in to a saved hashset.
 
 Sample lists of CIDR blocks available for US, Great Britain, Spain, Italy, and France
 
+
+### fwtest_solariburst_domains.sh
+Performs a nslookup on all Solariburst malicious domains
+Purpose: To test Endpoint Detection Response and Network Monitoring Software
+
 ### install_ipset_rules.sh
 Performs the following:
 

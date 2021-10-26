@@ -103,3 +103,7 @@ Example script will shred itself once ran
 ### shred_self_and_dir.sh
 Example script will shred itself and the current directory (if empty)
 
+### use_ssl_decrypt_cert_on_cli.sh
+This allows you to use a custom ssl decrypt cert from the keystore on the cli.  
+
+For use with Zscaler/ Palo Alto Global Protect SSL decryption.

@@ -861,3 +861,27 @@ echo "config file at: /opt/AuditConsole/conf/AuditConsole.xml"
 jwall console-db-check /opt/AuditConsole
   
 }
+
+ipextract ()
+{
+# example ipextract < filename
+egrep --only-matching -E  '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
+}
+
+cidrextract ()
+{
+# example cidrextract < filename
+grep --only-matching -P '([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$'
+}
+
+if [ "$BASH" ]; then
+        export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S "
+        export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ; }"'echo "`date +'%y.%m.%d-%H:%M%S:'`" $USER "("$ORIGINAL_USER")" "COMMAND: " "$(history 1 | cut -c8-)" >> /Users/stevestonebraker/log/bash_eternal_history_new'
+        alias ehistory='cat /Users/stevestonebraker/log/bash_eternal_history_new'
+        readonly PROMPT_COMMAND
+        readonly HISTSIZE
+        readonly HISTFILE
+        readonly HOME
+        readonly HISTIGNORE
+        readonly HISTCONTROL
+fi

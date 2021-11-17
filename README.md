@@ -102,6 +102,9 @@ Performs the following:
 4. Add rules
 5. Modify iptables to use the new rules
 
+### ip_lookup_from_list.sh
+Will perform nslookup on a list of FQDNs in a file (provided via an argument)
+
 ### ubuntu_change_hostname.sh
 Easily change your hostname on any debian based distribution
 

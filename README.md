@@ -33,6 +33,9 @@ More details at http://brakertech.com/aws-add-two-network-interfaces-in-ubuntu-1
 ### aws-list-subnets-all-profiles.sh
 print subnets from all vpcs across all profiles to a txt file
 
+### aws-list-all-public-ips-all-profiles.sh
+output all ec2 public IPs from all profiles in ~/.aws/config
+
 ### aws-route53-saml2aws-all-account-backup.sh
 Exports all route53 zones across all AWS accounts
 

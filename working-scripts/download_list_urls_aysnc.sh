@@ -3,7 +3,7 @@
 # Author: Steve Stonebraker
 # Date: 6/29/2022
 # Purpose: Given a list of urls in a txt file, download all files
-# Note: this will try to download them all at the same time
+# Note: maximum ten concurrent threads
 # usage: ./download_list_urls_aysnc.sh <filename>
 #
 

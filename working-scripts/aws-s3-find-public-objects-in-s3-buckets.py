@@ -1,7 +1,11 @@
 # place all bucket names, one per line in a file called bucket_names.txt
 # run the script (the script assumes you are using the default aws profile)
 # all public objects will be written to a file called public-objects.txt
-
+#
+# This script assumes your list of buckets are in a file named "bucket_names.txt"
+# and that you have a default AWS profile configured in ~/.aws/config
+# usage: python3 aws-s3-find-public-objects-in-s3-buckets.py
+#
 import boto3
 import os
 import threading

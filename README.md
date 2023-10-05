@@ -39,6 +39,12 @@ output all ec2 public IPs from all profiles in ~/.aws/config
 ### aws-route53-saml2aws-all-account-backup.sh
 Exports all route53 zones across all AWS accounts
 
+## aws-s3-dl-list-uris-multithread.py
+Downloads a list of s3 objects (user provided) using multithreading (100 concurrent downloads at a time)
+
+### aws-s3-find-public-objects-in-s3-buckets.py
+If you provide the file with a list of s3 buckets, it will enumerate every object in each bucket and output which objects are publicy accessible.
+
 ### generate_lambdaguard_report_all_profiles.sh
 Generates a lambdaguard report for all profiles listed in ~/.aws/config
 
